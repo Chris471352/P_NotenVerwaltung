@@ -4,12 +4,13 @@ import { useNavigate } from 'react-router-dom';
 
 function CreateStudent() {
     const [name, setName] = useState('');
+    const [vorname, setVorname] = useState('');
     const [email, setEmail] = useState('');
     const navigate = useNavigate();
 
     function handleSubmit(event) {
         event.preventDefault();
-        axios.post('http://localhost:8081/create', { name, email })
+        axios.post('http://localhost:8081/create', { name, vorname, email })
             .then(res => {
                 console.log(res);
                 navigate('/');
@@ -31,6 +32,15 @@ function CreateStudent() {
                         <label htmlFor=''>Email</label>
                         <input type='email' placeholder='Enter Email' className='form-control'
                             onChange={e => setEmail(e.target.value)} />
+                    </div>
+                    <div className='mb-2'>
+                        <label>Vorname</label>
+                        <input
+                            type='text'
+                            placeholder='Enter Vorname'
+                            className='form-control'
+                            onChange={e => setVorname(e.target.value)}
+                        />
                     </div>
                     <button className='btn btn-success'>Submit</button>
                 </form>
