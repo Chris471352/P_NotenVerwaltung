@@ -1,8 +1,6 @@
-// backend/server.js
-
 const express = require("express");
 const cors = require("cors");
-const mysql = require("mysql");
+const mysql = require("mysql2");
 
 const app = express();
 app.use(express.json());
@@ -29,30 +27,49 @@ const db = mysql.createConnection({
   database: DB_NAME
 });
 
-// ---- REST-Endpunkte (GET, POST, PUT, DELETE) bleiben gleich ----
+// Verbindung zur Datenbank herstellen
+db.connect(err => {
+  if (err) {
+    console.error('❌ Fehler bei der Verbindung zur Datenbank:', err.message);
+  } else {
+    console.log('✅ Verbindung zur Datenbank erfolgreich.');
+  }
+});
+
+// ---- REST-Endpunkte (GET, POST, PUT, DELETE) ----
 app.get("/", (req, res) => {
   const sql = "SELECT * FROM student";
   db.query(sql, (err, data) => {
-    if (err) return res.json("Error");
+    if (err) {
+      console.error("❌ SQL Fehler:", err.message); // Zeigt den genauen Fehler
+      return res.status(500).json({ error: err.message }); // Bessere Fehlerausgabe
+    }
+    console.log("✅ Datenbankantwort:", data); // Zeigt das Datenbankergebnis
     return res.json(data);
   });
 });
 
 app.post('/create', (req, res) => {
-  const sql = "INSERT INTO student (Name, Email) VALUES (?)";
-  const values = [req.body.name, req.body.email];
+  const sql = "INSERT INTO student (Name, Vorname, Email) VALUES (?)";
+  const values = [req.body.name, req.body.vorname, req.body.email];
   db.query(sql, [values], (err, data) => {
-    if (err) return res.json("Error");
+    if (err) {
+      console.error("❌ SQL Fehler:", err.message);
+      return res.status(500).json({ error: err.message });
+    }
     return res.json(data);
   });
 });
 
 app.put('/update/:id', (req, res) => {
-  const sql = "UPDATE student SET Name=?, Email=? WHERE id=?";
-  const values = [req.body.name, req.body.email];
+  const sql = "UPDATE student SET Name=?, Vorname=?, Email=? WHERE id=?";
+  const values = [req.body.name, req.body.vorname, req.body.email];
   const id = req.params.id;
   db.query(sql, [...values, id], (err, data) => {
-    if (err) return res.json("Error");
+    if (err) {
+      console.error("❌ SQL Fehler:", err.message);
+      return res.status(500).json({ error: err.message });
+    }
     return res.json(data);
   });
 });
@@ -61,8 +78,13 @@ app.delete('/student/:id', (req, res) => {
   const sql = "DELETE FROM student WHERE id=?";
   const id = req.params.id;
   db.query(sql, [id], (err, data) => {
-    if (err) return res.json("Error");
-    if (data.affectedRows === 0) return res.json("No record found to delete");
+    if (err) {
+      console.error("❌ SQL Fehler:", err.message);
+      return res.status(500).json({ error: err.message });
+    }
+    if (data.affectedRows === 0) {
+      return res.status(404).json({ error: "No record found to delete" });
+    }
     return res.json(data);
   });
 });

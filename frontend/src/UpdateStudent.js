@@ -1,10 +1,10 @@
-// frontend/src/UpdateStudent.js
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 function UpdateStudent() {
   const [name, setName] = useState('');
+  const [vorname, setVorname] = useState('');
   const [email, setEmail] = useState('');
   const { id } = useParams();
   const navigate = useNavigate();
@@ -12,7 +12,7 @@ function UpdateStudent() {
 
   function handleSubmit(event) {
     event.preventDefault();
-    axios.put(`${API_URL}/update/${id}`, { name, email })
+    axios.put(`${API_URL}/update/${id}`, { name, vorname, email })
       .then(res => {
         console.log(res);
         navigate('/');
@@ -32,6 +32,15 @@ function UpdateStudent() {
               placeholder='Enter Name'
               className='form-control'
               onChange={e => setName(e.target.value)}
+            />
+          </div>
+          <div className='mb-2'>
+            <label>Vorname</label>
+            <input
+              type='text'
+              placeholder='Enter Vorname'
+              className='form-control'
+              onChange={e => setVorname(e.target.value)}
             />
           </div>
           <div className='mb-2'>

@@ -9,11 +9,21 @@ function Student() {
   // API-Basis-URL aus .env auslesen
   const API_URL = process.env.REACT_APP_API_URL;
 
-  useEffect(() => {
+ /* useEffect(() => {
     axios.get(`${API_URL}/`)
       .then(res => setStudent(res.data))
       .catch(err => console.log(err));
+  }, [API_URL]);*/
+
+  useEffect(() => {
+    axios.get(`${API_URL}/`)
+      .then(res => {
+        console.log("API Response:", res.data); // Debugging: Zeigt das empfangene JSON
+        setStudent(res.data);
+      })
+      .catch(err => console.log("API Error:", err));
   }, [API_URL]);
+  
 
   const handleDelete = async (id) => {
     try {

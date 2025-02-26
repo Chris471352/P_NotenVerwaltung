@@ -1,12 +1,15 @@
+version: '3.8'
+
 services:
   db:
     image: mysql:8
     container_name: student-db
     environment:
-      - MYSQL_DATABASE=test
-      - MYSQL_ROOT_PASSWORD=secret
+      MYSQL_DATABASE: test
+      MYSQL_ROOT_PASSWORD: secret
     volumes:
       - db_data:/var/lib/mysql
+      - ./mysql-init:/docker-entrypoint-initdb.d:ro
     ports:
       - "3306:3306"
     networks:
@@ -16,14 +19,24 @@ services:
     build: ./backend
     container_name: student-service
     environment:
-      - DB_HOST=db
-      - DB_USER=root
-      - DB_PASSWORD=secret
-      - DB_NAME=test
+      DB_HOST: db  # Verwenden Sie den Service-Namen "db" als Host
+      DB_USER: root
+      DB_PASSWORD: secret
+      DB_NAME: test
     depends_on:
       - db
     ports:
       - "8081:8081"
+    networks:
+      - backend-net
+
+  frontend:
+    build: ./frontend
+    container_name: student-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
     networks:
       - backend-net
 

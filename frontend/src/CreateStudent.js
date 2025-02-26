@@ -1,17 +1,17 @@
-// frontend/src/CreateStudent.js
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function CreateStudent() {
   const [name, setName] = useState('');
+  const [vorname, setVorname] = useState('');
   const [email, setEmail] = useState('');
   const navigate = useNavigate();
   const API_URL = process.env.REACT_APP_API_URL;
 
   function handleSubmit(event) {
     event.preventDefault();
-    axios.post(`${API_URL}/create`, { name, email })
+    axios.post(`${API_URL}/create`, { name, vorname, email })
       .then(res => {
         console.log(res);
         navigate('/');
@@ -31,6 +31,15 @@ function CreateStudent() {
               placeholder='Enter Name'
               className='form-control'
               onChange={e => setName(e.target.value)}
+            />
+          </div>
+          <div className='mb-2'>
+            <label>Vorname</label>
+            <input
+              type='text'
+              placeholder='Enter Vorname'
+              className='form-control'
+              onChange={e => setVorname(e.target.value)}
             />
           </div>
           <div className='mb-2'>
