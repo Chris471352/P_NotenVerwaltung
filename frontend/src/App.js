@@ -1,22 +1,16 @@
-// frontend/src/App.js
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Student from './Student';
-import CreateStudent from './CreateStudent';
-import UpdateStudent from './UpdateStudent';
+import Home from './components/Home';
 
 function App() {
   return (
-    <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path='/' element={<Student />} />
-          <Route path='/create' element={<CreateStudent />} />
-          <Route path='/update/:id' element={<UpdateStudent />} />
-        </Routes>
-      </BrowserRouter>
-    </div>
+    <Router>
+      <Routes>
+        {/* Startseite zeigt direkt die Notenverwaltung */}
+        <Route path="/" element={<Home />} />
+      </Routes>
+    </Router>
   );
 }
 

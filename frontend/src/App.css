@@ -2,3 +2,20 @@
 .App {
     text-align: center;
   }
+
+  .note-row:hover .note-actions {
+    visibility: visible;
+  }
+  
+  .note-actions {
+    visibility: hidden; /* Standardmäßig ausgeblendet */
+  }
+
+  .note-row:hover .note-actions {
+    visibility: visible;
+  }
+  
+  .note-actions {
+    visibility: hidden; /* Standardzustand: ausgeblendet */
+  }
+  
