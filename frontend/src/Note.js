@@ -40,6 +40,7 @@ useEffect(() => {
                   <th>Note0</th>
                   <th>Note1</th>
                   <th>Note2</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
