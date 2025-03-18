@@ -2,18 +2,18 @@
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Student from './Student';
-import CreateStudent from './CreateStudent';
-import UpdateStudent from './UpdateStudent';
+import Note from './Note';
+import CreateNote from './CreateNote';
+import UpdateNote from './UpdateNote';
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<Student />} />
-          <Route path='/create' element={<CreateStudent />} />
-          <Route path='/update/:id' element={<UpdateStudent />} />
+          <Route path='/' element={<Note />} />
+          <Route path='/create' element={<CreateNote />} />
+          <Route path='/update/:id' element={<UpdateNote/>} />
         </Routes>
       </BrowserRouter>
     </div>

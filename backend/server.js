@@ -12,6 +12,8 @@ app.use(cors({
   credentials: true
 }));
 
+setTimeout(function(){
+
 // ---- NEU: Environment-Variablen mit Default-Werten ----
 const {
   DB_HOST = 'localhost',
@@ -38,7 +40,7 @@ db.connect(err => {
 
 // ---- REST-Endpunkte (GET, POST, PUT, DELETE) ----
 app.get("/", (req, res) => {
-  const sql = "SELECT * FROM student";
+  const sql = "SELECT * FROM note";
   db.query(sql, (err, data) => {
     if (err) {
       console.error("❌ SQL Fehler:", err.message); // Zeigt den genauen Fehler
@@ -50,8 +52,8 @@ app.get("/", (req, res) => {
 });
 
 app.post('/create', (req, res) => {
-  const sql = "INSERT INTO student (Name, Vorname, Email) VALUES (?)";
-  const values = [req.body.name, req.body.vorname, req.body.email];
+  const sql = "INSERT INTO note (Semester, Modulname, Leistungspunkte, Note0, Note1, Note2) VALUES (?)";
+  const values = [req.body.Semester, req.body.Modulname, req.body.Leistungspunkte, req.body.Note0, req.body.Note1, req.body.Note2];
   db.query(sql, [values], (err, data) => {
     if (err) {
       console.error("❌ SQL Fehler:", err.message);
@@ -62,8 +64,8 @@ app.post('/create', (req, res) => {
 });
 
 app.put('/update/:id', (req, res) => {
-  const sql = "UPDATE student SET Name=?, Vorname=?, Email=? WHERE id=?";
-  const values = [req.body.name, req.body.vorname, req.body.email];
+  const sql = "UPDATE note SET Semester=?, Modulname=?, Leistungspunkte=?, Note0=?, Note1=?, Note2=? WHERE id=?";
+  const values = [req.body.Semester, req.body.Modulname, req.body.Leistungspunkte, req.body.Note0, req.body.Note1, req.body.Note2];
   const id = req.params.id;
   db.query(sql, [...values, id], (err, data) => {
     if (err) {
@@ -74,8 +76,8 @@ app.put('/update/:id', (req, res) => {
   });
 });
 
-app.delete('/student/:id', (req, res) => {
-  const sql = "DELETE FROM student WHERE id=?";
+app.delete('/note/:id', (req, res) => {
+  const sql = "DELETE FROM note WHERE id=?";
   const id = req.params.id;
   db.query(sql, [id], (err, data) => {
     if (err) {
@@ -88,6 +90,8 @@ app.delete('/student/:id', (req, res) => {
     return res.json(data);
   });
 });
+
+}, 30 * 1000);
 
 app.listen(8081, () => {
   console.log("Backend läuft auf Port 8081...");
