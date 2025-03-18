@@ -1,10 +1,13 @@
-CREATE TABLE IF NOT EXISTS student (
+CREATE TABLE IF NOT EXISTS note (
   ID INT AUTO_INCREMENT PRIMARY KEY,
-  Name VARCHAR(255),
-  Vorname VARCHAR(255),
-  Email VARCHAR(255)
+  Semester INT,
+  Modulname VARCHAR(255),
+  Leistungspunkte INT,
+  Note0 INT,
+  Note1 INT,
+  Note2 INT
 );
 
-INSERT INTO student (Name, Vorname, Email) VALUES
-('Doe', 'John', 'john.doe@example.com'),
-('Muster', 'Max', 'max.muster@example.com');
+INSERT INTO note (Semester, Modulname, Leistungspunkte, Note0, Note1, Note2) VALUES
+(1, 'Wirtschaftsmathematik', 5, 2, 0, 0),
+(1, 'Materialwirtschaft', 4, 1, 0, 0);
