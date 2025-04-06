@@ -33,7 +33,7 @@ function CreateNote() {
             <label>Semester</label>
             <input
               type='number'
-              placeholder='Enter Semester'
+              placeholder='Geben Sie das Semester ein'
               className='form-control'
               onChange={e => setSemester(e.target.value)}
             />
@@ -42,7 +42,7 @@ function CreateNote() {
             <label>Modulname</label>
             <input
               type='text'
-              placeholder='Enter Modulname'
+              placeholder='Geben Sie den Modulnamen ein'
               className='form-control'
               onChange={e => setModulname(e.target.value)}
             />
@@ -51,34 +51,34 @@ function CreateNote() {
             <label>Leistungspunkte</label>
             <input
               type='number'
-              placeholder='Enter Leistungspunkte'
+              placeholder='Geben Sie die Leistungspunkte ein'
               className='form-control'
               onChange={e => setLeistungspunkte(e.target.value)}
             />
           </div>
           <div className='mb-2'>
-            <label>Note0</label>
+            <label>Note</label>
             <input
               type='number'
-              placeholder='Enter Leistungspunkte'
+              placeholder='Geben Sie Ihre Note ein'
               className='form-control'
               onChange={e => setNote0(e.target.value)}
             />
           </div>
           <div className='mb-2'>
-            <label>note1</label>
+            <label>2. Versuch</label>
             <input
               type='number'
-              placeholder='Enter Leistungspunkte'
+              placeholder='Geben Sie Ihren 2. Versuch ein (optional)'
               className='form-control'
               onChange={e => setNote1(e.target.value)}
             />
           </div>
           <div className='mb-2'>
-            <label>note2</label>
+            <label>3. Versuch</label>
             <input
               type='number'
-              placeholder='Enter Leistungspunkte'
+              placeholder='Geben Sie Ihren 3. Versuch ein (optional)'
               className='form-control'
               onChange={e => setNote2(e.target.value)}
             />

@@ -3,19 +3,17 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 function Note() {
-
   const [note, setNote] = useState([]);
-
-  // API-Basis-URL aus .env auslesen
+  // Speichert das aktuell ausgewählte Semester oder null (keine Filterung)
+  const [selectedSemester, setSelectedSemester] = useState(null);
+  
   const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
-    axios.get(`${API_URL}/`)
-      .then(res => {
-        console.log("API Response:", res.data); // Debugging: Zeigt das empfangene JSON
-        setNote(res.data);
-      })
-      .catch(err => console.log("API Error:", err));
+    axios
+      .get(`${API_URL}/`)
+      .then((res) => setNote(res.data))
+      .catch((err) => console.log("API Error:", err));
   }, [API_URL]);
 
   const handleDelete = async (id) => {
@@ -27,75 +25,134 @@ function Note() {
     }
   };
 
+  // Alle in der Datenbank vorhandenen Semester ermitteln:
+  // Map auf 'Semester', dann Set für eindeutige Werte, dann Array draus machen.
+  const uniqueSemesters = [...new Set(note.map((item) => item.Semester))].sort();
+
+  // Klick auf Semester-Button => wenn das Semester bereits ausgewählt war, Filter aufheben,
+  // sonst das geklickte Semester auswählen.
+  const handleSemesterClick = (semester) => {
+    if (selectedSemester === semester) {
+      setSelectedSemester(null);
+    } else {
+      setSelectedSemester(semester);
+    }
+  };
+
+  // Gefilterte Noten, je nach selectedSemester (null = alle)
+  const filteredNotes = selectedSemester
+    ? note.filter((n) => n.Semester === selectedSemester)
+    : note;
+
   return (
-    <div className="container-fluid p-0 vh-100">
-      {/* Kopfzeile */}
-      <div className="bg-dark text-white p-3">
+    <>
+      {/* Obere Leiste (fixiert) */}
+      <div
+        className="bg-dark text-white p-3"
+        style={{
+          height: "72px",
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0
+        }}
+      >
         <h2 className="mb-0">SimpleNoten</h2>
       </div>
 
-      <div className="row g-0 flex-nowrap">
-        {/* Sidebar: Flexbox-Spalte (d-flex flex-column), um Inhalt zu strecken */}
-        <div className="col-2 d-flex flex-column bg-light border-end p-3" style={{ minWidth: '220px' }}>
+      {/* Linke Sidebar (fixiert), Button am unteren Rand */}
+      <div
+        className="bg-light border-end p-3"
+        style={{
+          position: "fixed",
+          top: "72px",   // unterhalb der Kopfzeile
+          left: 0,
+          bottom: 0,
+          width: "220px",
+          display: "flex",
+          flexDirection: "column"
+        }}
+      >
+        {/* Der obere Teil ist scrollbar */}
+        <div style={{ flex: "1 1 auto", overflowY: "auto" }}>
           <h5>Semester</h5>
-          <button className="btn btn-outline-secondary w-100 text-start mb-2">1. Semester</button>
-          <button className="btn btn-outline-secondary w-100 text-start mb-2">2. Semester</button>
-          <button className="btn btn-outline-secondary w-100 text-start mb-4">3. Semester</button>
 
-          {/* Mit mt-auto schieben wir diesen Bereich nach unten */}
-          <div className="mt-auto">
-            <Link to="/create" className="btn btn-success w-100">
-              + Note hinzufügen
-            </Link>
-          </div>
+          {/* Dynamische Semester-Buttons */}
+          {uniqueSemesters.map((sem) => (
+            <button
+              key={sem}
+              className={`btn w-100 text-start mb-2 ${
+                selectedSemester === sem ? "btn-secondary" : "btn-outline-secondary"
+              }`}
+              onClick={() => handleSemesterClick(sem)}
+            >
+              {sem}. Semester
+            </button>
+          ))}
         </div>
 
-        {/* Hauptbereich mit der Tabelle */}
-        <div className="col p-3">
-          <div className="mb-3">
-            {/* Link zum Erstellen einer neuen Note/Modul-Eintrag */}
-            <Link to="/create" className="btn btn-success">+ Modul</Link>
-          </div>
-          <table className="table table-bordered align-middle">
-            <thead className="table-light">
-              <tr>
-                <th>Semester</th>
-                <th>Modulname</th>
-                <th>Leistungspunkte</th>
-                <th>Note</th>
-                <th>Versuch 1</th>
-                <th>Versuch 2</th>
-                <th>Aktionen</th>
-              </tr>
-            </thead>
-            <tbody>
-              {note.map((data, i) => (
-                <tr key={i}>
-                  <td>{data.Semester}</td>
-                  <td>{data.Modulname}</td>
-                  <td>{data.Leistungspunkte}</td>
-                  <td>{data.Note0}</td>
-                  <td>{data.Note1}</td>
-                  <td>{data.Note2}</td>
-                  <td>
-                    <Link to={`/update/${data.ID}`} className="btn btn-primary btn-sm me-2">
-                      Update
-                    </Link>
-                    <button
-                      className="btn btn-danger btn-sm"
-                      onClick={() => handleDelete(data.ID)}
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        {/* Der untere Teil bleibt fix am Boden der Sidebar */}
+        <div>
+          <Link to="/create" className="btn btn-success w-100">
+            + Note hinzufügen
+          </Link>
         </div>
       </div>
-    </div>
+
+      {/* Hauptinhalt: wird nach rechts/unten verschoben */}
+      <div
+        style={{
+          marginTop: "72px",   // Platz für die Kopfzeile
+          marginLeft: "220px", // Platz für die Sidebar
+          padding: "1rem"
+        }}
+      >
+        <div className="mb-3">
+          <Link to="/create" className="btn btn-success">+ Modul</Link>
+        </div>
+
+        <table className="table table-bordered align-middle">
+          <thead className="table-light">
+            <tr>
+              <th>Semester</th>
+              <th>Modulname</th>
+              <th>Leistungspunkte</th>
+              <th>Note</th>
+              <th>Versuch 1</th>
+              <th>Versuch 2</th>
+              <th>Aktionen</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredNotes.map((data, i) => (
+              <tr key={i}>
+                <td>{data.Semester}</td>
+                <td>{data.Modulname}</td>
+                <td>{data.Leistungspunkte}</td>
+                <td>{data.Note0}</td>
+                <td>{data.Note1}</td>
+                <td>{data.Note2}</td>
+                <td>
+                  <Link
+                    to={`/update/${data.ID}`}
+                    className="btn btn-primary btn-sm me-2"
+                  >
+                    Update
+                  </Link>
+                  <button
+                    className="btn btn-danger btn-sm"
+                    onClick={() => handleDelete(data.ID)}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </>
   );
 }
 
-export default Note
+export default Note;
