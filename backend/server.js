@@ -16,9 +16,9 @@ setTimeout(function(){
 
 // ---- NEU: Environment-Variablen mit Default-Werten ----
 const {
-  DB_HOST = 'localhost',
+  DB_HOST = 'db',
   DB_USER = 'root',
-  DB_PASSWORD = '',
+  DB_PASSWORD = 'secret',
   DB_NAME = 'test'
 } = process.env;
 
