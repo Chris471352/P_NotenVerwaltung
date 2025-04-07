@@ -19,7 +19,6 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          # Node 20, damit "react-router@7.2.0" keine Warnung mehr schmeißt
           node-version: 20
 
       - name: Install Dependencies and Test Frontend

@@ -25,17 +25,6 @@ function UpdateNote() {
       .catch((err) => console.log("API Error:", err));
   }, [API_URL]);
 
-  // Du könntest hier auch den Datensatz direkt laden (axios.get(`/note/${id}`)) 
-  // und die Felder vorbelegen, falls du möchtest:
-  // useEffect(() => {
-  //   axios.get(`${API_URL}/note/${id}`)
-  //     .then((res) => {
-  //       setSemester(res.data.semester);
-  //       setModulname(res.data.modulname);
-  //       ...
-  //     })
-  //     .catch(err => console.log(err));
-  // }, [API_URL, id]);
 
   const uniqueSemesters = [...new Set(allNotes.map((item) => item.Semester))].sort();
 
