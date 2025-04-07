@@ -44,6 +44,9 @@ function Note() {
     ? note.filter((n) => n.Semester === selectedSemester)
     : note;
 
+  // => Hier die Noten nach Semester aufsteigend sortieren
+  const sortedFilteredNotes = [...filteredNotes].sort((a, b) => a.Semester - b.Semester);
+
   return (
     <>
       {/* Obere Leiste (fixiert) */}
@@ -107,10 +110,6 @@ function Note() {
           padding: "1rem"
         }}
       >
-        <div className="mb-3">
-          <Link to="/create" className="btn btn-success">+ Modul</Link>
-        </div>
-
         <table className="table table-bordered align-middle">
           <thead className="table-light">
             <tr>
@@ -124,7 +123,7 @@ function Note() {
             </tr>
           </thead>
           <tbody>
-            {filteredNotes.map((data, i) => (
+            {sortedFilteredNotes.map((data, i) => (
               <tr key={i}>
                 <td>{data.Semester}</td>
                 <td>{data.Modulname}</td>
