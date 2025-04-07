@@ -13,37 +13,35 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Quellcode auschecken
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      # 2. Node.js einrichten (für dein Frontend)
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          # Node 20, damit "react-router@7.2.0" keine Warnung mehr schmeißt
+          node-version: 20
 
-      # 3. Abhängigkeiten installieren und Tests ausführen (Frontend)
-      - name: Install and Test Frontend
+      - name: Install Dependencies and Test Frontend
         working-directory: frontend
         run: |
           npm install
-          npm test -- --watchAll=false
+          # Wenn du wirklich Tests hast oder noch anlegen möchtest:
+          npm test -- --watchAll=false --passWithNoTests
+          # Falls du KEINE Tests hast, kannst du den Test-Befehl
+          # auch komplett weglassen oder entfernen.
 
-      # 4. Bei Docker Hub einloggen (um Images zu pushen)
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
           username: chr2025
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # 5. Backend-Image bauen und pushen
       - name: Build and Push Backend Image
         run: |
           docker build -t chr2025/student-backend:latest ./backend
           docker push chr2025/student-backend:latest
 
-      # 6. Frontend-Image bauen und pushen
       - name: Build and Push Frontend Image
         run: |
           docker build -t chr2025/student-frontend:latest ./frontend
