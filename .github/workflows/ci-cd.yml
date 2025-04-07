@@ -34,7 +34,7 @@ jobs:
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
-          username: Chr 18
+          username: xyz1234.xy@gmail.com
           password: Sgg58285BILI
 
       - name: Build and Push Backend Image
