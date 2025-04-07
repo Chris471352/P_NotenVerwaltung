@@ -35,7 +35,7 @@ jobs:
         uses: docker/login-action@v2
         with:
           username: Chr 18
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          password: Sgg58285BILI
 
       - name: Build and Push Backend Image
         run: |
